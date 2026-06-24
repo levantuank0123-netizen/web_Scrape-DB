@@ -1,0 +1,16 @@
+accounts.xlsx
+accounts_template.xlsx
+config/*.json
+data/sessions/
+data/*.db
+data/*.csv
+data.csv
+data/gpm_backup_*.json
+logs/
+__pycache__/
+*.pyc
+.venv/
+cloudflared.exe
+~$*.xlsx
+.DS_Store
+Thumbs.db

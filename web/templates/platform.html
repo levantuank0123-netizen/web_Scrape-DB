@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}{{ meta.name }} — Affiliate Scraper{% endblock %}
+
+{% block header_actions %}
+<button onclick="triggerScrape('{{ platform }}')"
+        class="bg-emerald-600 hover:bg-emerald-500 px-3 py-1.5 rounded-lg text-sm font-medium">
+  ⚡ Re-scrape
+</button>
+{% endblock %}
+
+{% block content %}
+
+<!-- Platform header -->
+<div class="rounded-2xl p-6 mb-6 bg-gradient-to-br {{ meta.gradient }} text-white">
+  <a href="{{ url_for('index') }}" class="text-xs opacity-80 hover:underline">← Back</a>
+  <div class="flex items-end justify-between mt-2">
+    <div>
+      <div class="text-2xl font-bold flex items-center gap-2">{{ meta.icon }} {{ meta.name }} Dashboard</div>
+      <div class="text-sm opacity-80 mt-1">{{ rows|length }} dashboards · {{ metric_date }}</div>
+    </div>
+    <input id="filter" type="text" placeholder="🔍 Filter label/email…"
+           class="bg-black/30 placeholder-white/50 px-3 py-2 rounded-lg text-sm w-64 outline-none border border-white/20"
+           oninput="filterTable(this.value)">
+  </div>
+</div>
+
+<!-- Data table -->
+<div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="data-table" id="data-table">
+      <thead>
+        <tr>
+          <th>Label</th>
+          <th>Owner</th>
+          <th>Email</th>
+          <th class="text-right">{% if platform == 'firstpromoter' %}Clicks{% else %}Visitors{% endif %}</th>
+          <th class="text-right">{% if platform == 'firstpromoter' %}Refs{% else %}Leads{% endif %}</th>
+          <th class="text-right">{% if platform == 'firstpromoter' %}Customers{% else %}Conv.{% endif %}</th>
+          <th class="text-right">Unpaid</th>
+          <th class="text-right">Paid</th>
+          <th class="text-right">Due Now</th>
+          {% if platform == 'firstpromoter' %}
+          <th class="text-right">Pending</th>
+          {% endif %}
+          <th>Status</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in rows %}
+        <tr data-search="{{ r.label }} {{ r.email }} {{ r.owner }}">
+          <td><span class="font-medium">{{ r.label }}</span></td>
+          <td><span class="text-xs bg-slate-800 px-2 py-0.5 rounded">{{ r.owner or '-' }}</span></td>
+          <td class="text-xs text-muted">{{ r.email or '-' }}</td>
+          <td class="text-right">{{ "{:,}".format(r.clicks) if r.clicks else '-' }}</td>
+          <td class="text-right">{{ r.ref_count if r.ref_count is not none else '-' }}</td>
+          <td class="text-right">{{ r.orders if r.orders is not none else '-' }}</td>
+          <td class="text-right">${{ "%.2f"|format(r.unpaid) if r.unpaid else '-' }}</td>
+          <td class="text-right">${{ "%.2f"|format(r.paid) if r.paid else '-' }}</td>
+          <td class="text-right">
+            {% if r.due_now and r.due_now > 0 %}
+              <span class="due-now">${{ "%.2f"|format(r.due_now) }}</span>
+            {% else %}-{% endif %}
+          </td>
+          {% if platform == 'firstpromoter' %}
+          <td class="text-right">
+            {% if r.pending_count %}
+              {{ r.pending_count }} = ${{ "%.2f"|format(r.pending_amount or 0) }}
+            {% else %}-{% endif %}
+          </td>
+          {% endif %}
+          <td>
+            {% if r.error %}
+              <span class="err" title="{{ r.error }}">{{ r.error[:30] }}{% if r.error|length > 30 %}…{% endif %}</span>
+            {% else %}
+              <span class="text-emerald-400">✓ OK</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if r.ref_link %}<a href="{{ r.ref_link }}" target="_blank" class="text-blue-400 hover:underline text-xs">ref</a>{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+        {% if not rows %}
+        <tr><td colspan="12" class="text-center py-8 text-muted">Chưa có data cho ngày {{ metric_date }}. Click "Re-scrape" để chạy.</td></tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+function filterTable(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('#data-table tbody tr').forEach(tr => {
+    const s = (tr.dataset.search || '').toLowerCase();
+    tr.style.display = s.includes(q) ? '' : 'none';
+  });
+}
+</script>
+{% endblock %}

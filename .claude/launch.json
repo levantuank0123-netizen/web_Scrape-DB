@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "flask-web-app",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-X", "utf8", "web/app.py"],
+      "port": 5000
+    },
+    {
+      "name": "cloudflared-tunnel",
+      "runtimeExecutable": "./cloudflared.exe",
+      "runtimeArgs": ["tunnel", "--url", "http://localhost:5000"],
+      "port": 0
+    }
+  ]
+}

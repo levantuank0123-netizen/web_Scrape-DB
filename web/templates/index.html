@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- KPI Row -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+    <div class="text-xs text-muted uppercase">Total dashboards</div>
+    <div class="text-3xl font-bold mt-1">{{ kpi.dashboards }}</div>
+    <div class="text-xs text-muted mt-2">Date: {{ metric_date }}</div>
+  </div>
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+    <div class="text-xs text-muted uppercase">Success rate</div>
+    <div class="text-3xl font-bold mt-1 text-emerald-400">{{ kpi.success_rate }}%</div>
+    <div class="text-xs text-muted mt-2">{{ kpi.success }} ok / {{ kpi.fail }} lỗi</div>
+  </div>
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+    <div class="text-xs text-muted uppercase">Total Unpaid</div>
+    <div class="text-3xl font-bold mt-1 text-amber-400">${{ "%.2f"|format(kpi.total_unpaid) }}</div>
+    <div class="text-xs text-muted mt-2">Approved chưa pay</div>
+  </div>
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+    <div class="text-xs text-muted uppercase">Due Now + Pending</div>
+    <div class="text-3xl font-bold mt-1 text-rose-400">${{ "%.2f"|format(kpi.total_due_now + kpi.total_pending) }}</div>
+    <div class="text-xs text-muted mt-2">Cần đòi / chờ duyệt</div>
+  </div>
+</div>
+
+<!-- Platform Grid -->
+<h2 class="text-lg font-semibold mb-4 text-muted uppercase tracking-wider text-xs">Networks</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+  {% for s in summary %}
+    {% if s.status == 'active' or s.total > 0 %}
+    <a href="{{ url_for('platform_detail', platform=s.key, date=metric_date) }}"
+       class="card-glow block rounded-2xl p-6 bg-gradient-to-br {{ s.gradient }} text-white">
+      <div class="flex items-start justify-between mb-4">
+        <div>
+          <div class="text-xl font-bold flex items-center gap-2">{{ s.icon }} {{ s.name }}</div>
+          <div class="text-xs opacity-80 mt-1">{{ s.total }} dashboard · {{ s.success }} ok / {{ s.fail }} lỗi</div>
+        </div>
+        <div class="text-right">
+          <div class="text-2xl font-bold">${{ "%.0f"|format(s.total_unpaid) }}</div>
+          <div class="text-xs opacity-80">unpaid</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-center text-sm bg-black/20 rounded-xl p-3">
+        <div>
+          <div class="font-semibold">{{ "{:,}".format(s.total_clicks) }}</div>
+          <div class="text-xs opacity-70">clicks</div>
+        </div>
+        <div>
+          <div class="font-semibold">${{ "%.0f"|format(s.total_due_now) }}</div>
+          <div class="text-xs opacity-70">due now</div>
+        </div>
+        <div>
+          <div class="font-semibold">${{ "%.0f"|format(s.total_pending_amount) }}</div>
+          <div class="text-xs opacity-70">pending</div>
+        </div>
+      </div>
+    </a>
+    {% else %}
+    <div class="rounded-2xl p-6 bg-slate-900 border border-slate-800 text-slate-500">
+      <div class="flex items-start justify-between mb-2">
+        <div>
+          <div class="text-xl font-bold flex items-center gap-2">{{ s.icon }} {{ s.name }}</div>
+          <div class="text-xs mt-1">Adapter chưa có</div>
+        </div>
+        <span class="text-xs bg-slate-800 px-2 py-1 rounded">Coming soon</span>
+      </div>
+    </div>
+    {% endif %}
+  {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Affiliate Dashboard Scraper</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background: #0b0d12; }
+    .card-glow:hover { box-shadow: 0 0 40px rgba(99,102,241,0.3); transform: translateY(-2px); }
+    .card-glow { transition: all 0.2s ease; cursor: pointer; }
+    .text-muted { color: #94a3b8; }
+    table.data-table { width: 100%; border-collapse: collapse; }
+    table.data-table th, table.data-table td { padding: 8px 12px; border-bottom: 1px solid #1f2937; text-align: left; font-size: 13px; }
+    table.data-table th { background: #111827; color: #cbd5e1; font-weight: 600; }
+    table.data-table tr:hover { background: #111827; }
+    .due-now { background: #ff6666; color: white; font-weight: bold; padding: 2px 6px; border-radius: 4px; }
+    .err { background: #fee2e2; color: #991b1b; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body class="text-slate-100 min-h-screen">
+
+  <!-- Login screen -->
+  <div id="login-screen" class="min-h-screen flex items-center justify-center px-4">
+    <div class="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-2xl p-8">
+      <div class="text-3xl mb-2">📊</div>
+      <h1 class="text-xl font-bold">Affiliate Dashboard</h1>
+      <p class="text-xs text-muted mb-6">Đăng nhập để xem metrics</p>
+      <form id="login-form" class="space-y-3">
+        <input id="login-user" type="text" placeholder="Username" required
+               class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500">
+        <input id="login-pass" type="password" placeholder="Password" required
+               class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm outline-none focus:border-blue-500">
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 py-2 rounded-lg text-sm font-medium">
+          Đăng nhập
+        </button>
+        <div id="login-error" class="text-red-400 text-xs"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- App -->
+  <div id="app" class="hidden">
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-10">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <a href="#/" class="flex items-center gap-3">
+          <div class="text-2xl">📊</div>
+          <div>
+            <div class="text-lg font-bold">Affiliate Dashboard</div>
+            <div class="text-xs text-muted">Multi-platform metrics aggregator</div>
+          </div>
+        </a>
+        <div class="flex items-center gap-3">
+          <select id="date-picker" class="bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-sm"></select>
+          <span id="login-user-display" class="text-xs text-muted"></span>
+          <button id="logout" class="text-xs bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded-lg">Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+      <!-- Index view -->
+      <div id="index-view">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8" id="kpi-row"></div>
+        <h2 class="text-lg font-semibold mb-4 text-muted uppercase tracking-wider text-xs">Networks</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5" id="platform-grid"></div>
+      </div>
+
+      <!-- Platform detail view -->
+      <div id="platform-view" class="hidden">
+        <div id="platform-header" class="rounded-2xl p-6 mb-6 text-white"></div>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="data-table" id="data-table">
+              <thead id="table-head"></thead>
+              <tbody id="table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="loading" class="text-center py-12 text-muted hidden">Đang tải data…</div>
+    </main>
+
+    <footer class="text-center text-xs text-muted py-6">
+      Affiliate Scraper · Cron 7h sáng mỗi ngày
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
