@@ -11,6 +11,7 @@ __pycache__/
 *.pyc
 .venv/
 cloudflared.exe
+apps_script_v6.js
 ~$*.xlsx
 .DS_Store
 Thumbs.db

@@ -28,9 +28,9 @@ DOMAIN_TO_PLATFORM = {
     "getrewardful.com": "getrewardful",
     "firstpromoter.com": "firstpromoter",
     "tolt.io": "tolt",
+    "goaffpro.com": "goaffpro",
     # Thêm dần khi có adapter mới:
     # "promotekit.com": "promotekit",
-    # "goaffpro.com": "goaffpro",
     # "uppromote.com": "uppromote",
     # "trackdesk.com": "trackdesk",
     # "partnerstack.com": "partnerstack",

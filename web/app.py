@@ -45,7 +45,7 @@ PLATFORM_META = {
     "getrewardful":  {"name": "Rewardful",      "gradient": "from-emerald-500 to-teal-700",  "icon": "🟢", "status": "active"},
     "firstpromoter": {"name": "FirstPromoter",  "gradient": "from-pink-500 to-rose-700",     "icon": "🌸", "status": "active"},
     "tolt":          {"name": "Tolt",           "gradient": "from-blue-500 to-indigo-700",   "icon": "🔵", "status": "coming"},
-    "goaffpro":      {"name": "GoAffPro",       "gradient": "from-green-500 to-emerald-700", "icon": "🟩", "status": "coming"},
+    "goaffpro":      {"name": "GoAffPro",       "gradient": "from-green-500 to-emerald-700", "icon": "🟩", "status": "active"},
     "uppromote":     {"name": "UpPromote",      "gradient": "from-orange-500 to-amber-700",  "icon": "🟧", "status": "coming"},
     "impact":        {"name": "Impact",         "gradient": "from-cyan-500 to-blue-700",     "icon": "🔷", "status": "coming"},
     "partnerstack":  {"name": "PartnerStack",   "gradient": "from-violet-500 to-purple-700", "icon": "🟣", "status": "coming"},
